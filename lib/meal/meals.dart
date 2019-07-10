@@ -34,12 +34,6 @@ class _MealsState extends State<Meals> {
     }
   }
 
-  void _removeItem(String id) {
-    setState(() {
-      meals.removeWhere((meal) => meal.id == id);
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,7 +47,6 @@ class _MealsState extends State<Meals> {
             affordability: meals[i].affordability,
             duration: meals[i].duration,
             complexity: meals[i].complexity,
-            removeItem: _removeItem,
           );
         },
         itemCount: meals.length,

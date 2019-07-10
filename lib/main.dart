@@ -23,6 +23,7 @@ class _MyAppState extends State<MyApp> {
   };
 
   List<Meal> _meals = DUMMY_MEALS;
+  List<Meal> _favorites = [];
 
   void _setFilters(Map<String, bool> filters) {
     setState(() {
@@ -38,6 +39,22 @@ class _MyAppState extends State<MyApp> {
         return true;
       }).toList();
     });
+  }
+
+  void _toggleFavorite(String id) {
+    setState(() {
+      final mealIndex = _favorites.indexWhere((meal) => meal.id == id);
+
+      if (mealIndex < 0) {
+        _favorites.add(_meals.firstWhere((meal) => meal.id == id));
+      } else {
+        _favorites.removeAt(mealIndex);
+      }
+    });
+  }
+
+  bool _isMealFavorite(String id) {
+    return _favorites.any((meal) => meal.id == id);
   }
 
   @override
@@ -64,9 +81,10 @@ class _MyAppState extends State<MyApp> {
             ),
       ),
       routes: {
-        '/': (_) => Tabs(),
+        '/': (_) => Tabs(_favorites),
         Meals.RouteName: (_) => Meals(_meals),
-        MealDetail.RouteName: (_) => MealDetail(),
+        MealDetail.RouteName: (_) =>
+            MealDetail(_toggleFavorite, _isMealFavorite),
         Filters.RouteName: (_) => Filters(_filters, _setFilters),
       },
     );
